@@ -1,17 +1,51 @@
 import React from "react";
 import type { FoodAdvice } from "../types";
 import { GiBadge } from "./GiBadge";
+import {
+  CheckCircle,
+  AlertTriangle,
+  AlertCircle,
+  Utensils,
+  Clock,
+  Leaf,
+} from "lucide-react";
+
 interface Props {
   result: FoodAdvice;
 }
 
 export const ResultCard: React.FC<Props> = ({ result }) => {
-  console.log({ result });
-  const bgByTag: Record<FoodAdvice["diabetesSafetyTag"], string> = {
-    good_choice: "#ecfdf3", // pastel green
-    okay_in_moderation: "#fef9c3", // pastel yellow
-    not_recommended: "#fee2e2", // pastel red
-    unknown: "#e5e7eb",
+  const getTagIcon = () => {
+    switch (result.diabetesSafetyTag) {
+      case "good_choice":
+        return <CheckCircle className="result-tag-icon" />;
+      case "okay_in_moderation":
+        return <AlertTriangle className="result-tag-icon" />;
+      case "not_recommended":
+        return <AlertCircle className="result-tag-icon" />;
+      default:
+        return <AlertCircle className="result-tag-icon" />;
+    }
+  };
+
+  const getTagColor = () => {
+    const colors = {
+      good_choice: "#166534",
+      okay_in_moderation: "#92400e",
+      not_recommended: "#991b1b",
+      unknown: "#4b5563",
+    };
+    return colors[result.diabetesSafetyTag];
+  };
+
+  const getTagLabel = () => {
+    const labels = {
+      good_choice: "Good Choice",
+      okay_in_moderation: "Okay in Moderation",
+      not_recommended: "Not Recommended",
+      unknown: "Unknown",
+    };
+    return labels[result.diabetesSafetyTag];
   };
 
   const gifByTag: Record<
@@ -31,39 +65,58 @@ export const ResultCard: React.FC<Props> = ({ result }) => {
       alt: "No, not recommended",
     },
     unknown: {
-      src: "https://tenor.com/lWTTjcv6Fsh.gif",
+      src: "https://media.tenor.com/lWTTjcv6FshAAAAC/confused-what.gif",
       alt: "Confused / unknown",
     },
   };
 
   return (
-    <div
-      className="result-card"
-      style={{ backgroundColor: bgByTag[result.diabetesSafetyTag] }}
-    >
+    <div className="result-card">
       <header className="result-header">
-        <h2>{result.foodName}</h2>
+        <div className="result-title-section">
+          <h2>{result.foodName}</h2>
+          <div className="result-tag" style={{ color: getTagColor() }}>
+            {getTagIcon()}
+            <span>{getTagLabel()}</span>
+          </div>
+        </div>
         <GiBadge gi={result.giCategory} tag={result.diabetesSafetyTag} />
       </header>
 
+      <div className="context">{result.context}</div>
+
       <div className="result-main">
         <div className="info-column">
-          <p className="context">{result.context}</p>
+          <div className="info-boxes">
+            <div className="info-box purple">
+              <div className="info-box-header">
+                <Utensils className="info-box-icon" />
+                <strong>Best as</strong>
+              </div>
+              <p className="info-box-content">
+                {result.recommendedUse === "main_meal"
+                  ? "Main meal"
+                  : result.recommendedUse === "snack"
+                  ? "Snack"
+                  : "Rare treat"}
+              </p>
+            </div>
 
-          <div className="line">
-            <strong>Best as:</strong>{" "}
-            {result.recommendedUse === "main_meal"
-              ? "Main meal"
-              : result.recommendedUse === "snack"
-              ? "Snack"
-              : "Rare treat"}
-          </div>
+            <div className="info-box blue">
+              <div className="info-box-header">
+                <span className="info-box-icon">🥄</span>
+                <strong>Recommended portion</strong>
+              </div>
+              <p className="info-box-content">{result.recommendedPortion}</p>
+            </div>
 
-          <div className="line">
-            <strong>Recommended portion:</strong> {result.recommendedPortion}
-          </div>
-          <div className="line">
-            <strong>Frequency:</strong> {result.frequencyAdvice}
+            <div className="info-box pink">
+              <div className="info-box-header">
+                <Clock className="info-box-icon" />
+                <strong>Frequency</strong>
+              </div>
+              <p className="info-box-content">{result.frequencyAdvice}</p>
+            </div>
           </div>
         </div>
 
@@ -79,7 +132,10 @@ export const ResultCard: React.FC<Props> = ({ result }) => {
 
       {result.betterAlternatives?.length > 0 && (
         <section className="alternatives">
-          <h3>Better alternatives</h3>
+          <h3>
+            <Leaf className="alternatives-icon" />
+            Better Alternatives
+          </h3>
           <ul>
             {result.betterAlternatives.map((alt) => (
               <li key={alt.name}>

@@ -65,7 +65,7 @@ export const ResultCard: React.FC<Props> = ({ result }) => {
       alt: "No, not recommended",
     },
     unknown: {
-      src: "https://media.tenor.com/lWTTjcv6FshAAAAC/confused-what.gif",
+      src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZXkwaGhkbzNkNHk1aWRkZjNwa3NhdDF3bWxhY3BzaXY4a2xpYjBldiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ZTFgbsUU0NRYI/giphy.gif",
       alt: "Confused / unknown",
     },
   };

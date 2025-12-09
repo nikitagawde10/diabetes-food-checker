@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { FoodAdvice } from "../types";
 import { GiBadge } from "./GiBadge";
 import {
@@ -9,6 +9,7 @@ import {
   Clock,
   Leaf,
 } from "lucide-react";
+import { GIF_POOL } from "./utils";
 
 interface Props {
   result: FoodAdvice;
@@ -48,27 +49,10 @@ export const ResultCard: React.FC<Props> = ({ result }) => {
     return labels[result.diabetesSafetyTag];
   };
 
-  const gifByTag: Record<
-    FoodAdvice["diabetesSafetyTag"],
-    { src: string; alt: string }
-  > = {
-    good_choice: {
-      src: "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExbXRoM2l0cHl3bTRlaThjd2V5OWRyejN4aGx5anlqZWdoOGV6ZzRkeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/gKGLm7ksfrqtKRQ0Sy/giphy.gif",
-      alt: "Yes, good choice",
-    },
-    okay_in_moderation: {
-      src: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHR4YnB3azhsdng1eHBseTlqZno3OXNxM3pldHZ2dGFkYjh0ZjY1ZyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/XBpEgheIVWnC8hwc46/giphy.gif",
-      alt: "Eat in moderation",
-    },
-    not_recommended: {
-      src: "https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNG80MmJhZ2w5Y212aWp1N3VvczRrZnh6eXZuZ3Uwc3FueDRlOTZzaCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/0qfkcpaLuTYgJTS0kY/giphy.gif",
-      alt: "No, not recommended",
-    },
-    unknown: {
-      src: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZXkwaGhkbzNkNHk1aWRkZjNwa3NhdDF3bWxhY3BzaXY4a2xpYjBldiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ZTFgbsUU0NRYI/giphy.gif",
-      alt: "Confused / unknown",
-    },
-  };
+  const selectedGif = useMemo(() => {
+    const pool = GIF_POOL[result.diabetesSafetyTag] ?? GIF_POOL.unknown;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }, [result.foodName, result.diabetesSafetyTag]);
 
   return (
     <div className="result-card">
@@ -122,8 +106,8 @@ export const ResultCard: React.FC<Props> = ({ result }) => {
 
         <div className="gif-column">
           <img
-            src={gifByTag[result.diabetesSafetyTag].src}
-            alt={gifByTag[result.diabetesSafetyTag].alt}
+            src={selectedGif.src}
+            alt={selectedGif.alt}
             className="result-gif"
             loading="lazy"
           />

@@ -7,14 +7,12 @@ export async function checkFood(foodName: string): Promise<FoodAdvice> {
   if (cached) {
     return cached;
   }
-
   // 2. Fallback to API
   const res = await fetch("/api/food-check", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ foodName }),
   });
-
   if (!res.ok) {
     throw new Error(`API error: ${res.status}`);
   }

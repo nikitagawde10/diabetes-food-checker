@@ -5,6 +5,7 @@ import { checkFood } from "./api";
 import { FoodAdvice } from "./types";
 import { CheckCircle, AlertTriangle, AlertCircle } from "lucide-react";
 import "./App.css";
+import { ResultSkeleton } from "./components/ResultSkeleton";
 
 const App: React.FC = () => {
   const [result, setResult] = useState<FoodAdvice | null>(null);
@@ -95,7 +96,8 @@ const App: React.FC = () => {
           </section>
         )}
 
-        {result && <ResultCard result={result} />}
+        {loading && <ResultSkeleton />}
+        {!loading && result && <ResultCard result={result} />}
       </main>
     </div>
   );

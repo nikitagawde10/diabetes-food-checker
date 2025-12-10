@@ -696,3 +696,62 @@ body {
     transform: rotate(360deg);
   }
 }
+.skeleton .shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.9) 50%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s infinite;
+  border-radius: 999px;
+}
+
+.skeleton-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skeleton-title {
+  width: 40%;
+  height: 28px;
+}
+
+.skeleton-tag {
+  width: 25%;
+  height: 24px;
+}
+
+.skeleton-context {
+  height: 80px;
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.skeleton-main {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 1.25rem;
+}
+
+.skeleton-box {
+  height: 70px;
+  border-radius: 16px;
+}
+
+.skeleton-gif {
+  height: 220px;
+  border-radius: 24px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

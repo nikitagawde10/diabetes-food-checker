@@ -6,12 +6,23 @@ import { FoodAdvice } from "./types";
 import { CheckCircle, AlertTriangle, AlertCircle } from "lucide-react";
 import "./App.css";
 import { ResultSkeleton } from "./components/ResultSkeleton";
+import { useAuth0 } from "@auth0/auth0-react";
+import { LoginScreen } from "./components/login/loginPage";
 
 const App: React.FC = () => {
+  const { isAuthenticated, isLoading, loginWithRedirect, logout, user } =
+    useAuth0();
+
   const [result, setResult] = useState<FoodAdvice | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  if (isLoading) {
+    return <div className="loading-screen">Loading...</div>;
+  }
+  if (!isAuthenticated) {
+    return <LoginScreen login={loginWithRedirect} />;
+  }
   const handleSearch = async (foodName: string) => {
     setLoading(true);
     setError(null);
@@ -28,6 +39,17 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
+      <div className="user-info">
+        <span>Welcome, {user?.name}</span>
+        <button
+          onClick={() =>
+            logout({ logoutParams: { returnTo: window.location.origin } })
+          }
+          className="logout-button"
+        >
+          Logout
+        </button>
+      </div>
       <header className="hero">
         <div className="hero-title-wrapper">
           <svg

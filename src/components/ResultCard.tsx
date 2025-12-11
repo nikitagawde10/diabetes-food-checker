@@ -9,7 +9,7 @@ import {
   Clock,
   Leaf,
 } from "lucide-react";
-import { GIF_POOL } from "./utils";
+import { getNextGif } from "./utils";
 
 interface Props {
   result: FoodAdvice;
@@ -49,10 +49,11 @@ export const ResultCard: React.FC<Props> = ({ result }) => {
     return labels[result.diabetesSafetyTag];
   };
 
-  const selectedGif = useMemo(() => {
-    const pool = GIF_POOL[result.diabetesSafetyTag] ?? GIF_POOL.unknown;
-    return pool[Math.floor(Math.random() * pool.length)];
-  }, [result.foodName, result.diabetesSafetyTag]);
+  // Option 1: use helper that remembers last index per tag
+  const selectedGif = useMemo(
+    () => getNextGif(result.diabetesSafetyTag),
+    [result.foodName, result.diabetesSafetyTag]
+  );
 
   return (
     <div className="result-card">

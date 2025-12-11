@@ -47,8 +47,8 @@ const App: React.FC = () => {
           <h1>Diabetes Food Checker</h1>
         </div>
         <p>
-          Type any Indian food or snack to see if it&apos;s diabetes-friendly,
-          its GI category, and safe portion sizes.
+          Type any food item or snack to see if it&apos;s diabetes-friendly, its
+          GI category, and safe portion sizes.
         </p>
         <SearchBar onSearch={handleSearch} loading={loading} />
       </header>

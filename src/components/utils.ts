@@ -136,23 +136,23 @@ export const GIF_POOL: Record<
       src: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExNDE4c2hqY29qdWg2YnR5eWlxcXg1bWQzY2NhdWhkeGpzZGIyNGt3MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/uUlVoSU6PX6rJ5DkIO/giphy.gif",
       alt: "Hard no",
     },
-    //jimin
     {
+      //jimin
       src: "https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3bmdyZDR2ZWt6YnA4cGVqOHpsZXA2NmI3ZWt4YzgzbjR0ZWIzNm5kdyZlcD12MV9naWZzX3NlYXJjaCZjdD1n/bacYwzpwaCuO3bmsBG/giphy.gif",
       alt: "Big no",
     },
-    //jimin
     {
+      //jimin
       src: "https://media1.tenor.com/m/30He1QHVvaAAAAAd/jinmojv21-bts.gif",
       alt: "Jimin says no",
     },
-    //jungkook
     {
+      //jungkook
       src: "https://media1.tenor.com/m/SdZ6vRFo8IUAAAAd/jungkook-jungkook-no.gif",
       alt: "Jungkook no",
     },
-    //jimin
     {
+      //jimin
       src: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExYzg0aXQwd2Jwc3g0NHB1NXJvOGxrN2RxejZodzZ5YzhlaXl3Zm1rdCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/d2sTZOZQNVAOIXs3Vv/giphy.gif",
       alt: "Absolutely not",
     },
@@ -196,3 +196,29 @@ export const GIF_POOL: Record<
     },
   ],
 };
+
+// Stores last random index used for each tag
+export const lastGifIndex: Record<string, number | null> = {
+  good_choice: null,
+  okay_in_moderation: null,
+  not_recommended: null,
+  unknown: null,
+};
+
+export function getNextGif(tag: FoodAdvice["diabetesSafetyTag"]) {
+  const pool = GIF_POOL[tag] ?? GIF_POOL.unknown;
+  if (pool.length === 0) {
+    return GIF_POOL.unknown[0];
+  }
+
+  const lastIndex = lastGifIndex[tag] ?? -1;
+  let newIndex = Math.floor(Math.random() * pool.length);
+
+  // Avoid immediate repetition if possible
+  if (pool.length > 1 && newIndex === lastIndex) {
+    newIndex = (newIndex + 1) % pool.length;
+  }
+
+  lastGifIndex[tag] = newIndex;
+  return pool[newIndex];
+}
